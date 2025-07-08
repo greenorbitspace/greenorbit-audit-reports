@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# greenorbit-audit-reports
-=======
 # Green Orbit Sustainability Audit Reports
 
 This repo publishes **static HTML sustainability reports** for audited websites via GitHub Pages.
@@ -89,4 +86,3 @@ Questions? Email audit@greenorbit.space
 
 ## ✨ Example Report Output
 See `reports/example-audit.html` for a preview.
->>>>>>> a71578f (✨ New audit reports)
