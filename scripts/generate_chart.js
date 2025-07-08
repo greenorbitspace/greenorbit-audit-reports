@@ -1,42 +1,33 @@
-const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 const fs = require('fs');
 const path = require('path');
+const QuickChart = require('quickchart-js');
 
-const width = 600;
-const height = 400;
-const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+function slugify(text) {
+  return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '');
+}
 
-async function generateChart(orgName, co2, totalBytes, requests, outPath) {
-  const config = {
+async function generateChart(orgName, co2, totalBytes, requests, outputDir) {
+  const chart = new QuickChart();
+  chart.setConfig({
     type: 'bar',
     data: {
       labels: ['CO₂ (g)', 'Page Size (KB)', 'Requests'],
       datasets: [{
-        label: `Metrics for ${orgName}`,
+        label: orgName,
         data: [co2, totalBytes / 1024, requests],
-        backgroundColor: ['#2E5F4D', '#4DAF7C', '#B8DFCA']
+        backgroundColor: ['#276749', '#38A169', '#63B3ED']
       }]
     },
     options: {
-      plugins: {
-        title: {
-          display: true,
-          text: `Sustainability Metrics: ${orgName}`,
-          font: { size: 16 }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } },
     }
-  };
+  });
+  chart.setWidth(600).setHeight(400).setBackgroundColor('white');
 
-  const buffer = await chartJSNodeCanvas.renderToBuffer(config);
-  const filename = `${orgName.toLowerCase().replace(/\s+/g, '_')}_metrics_chart.png`;
-  const outputFile = path.join(outPath, filename);
-  fs.writeFileSync(outputFile, buffer);
+  const imageBuffer = await chart.toBinary();
+  const filename = `${slugify(orgName)}_chart.png`;
+  fs.writeFileSync(path.join(outputDir, filename), imageBuffer);
   return filename;
 }
 
