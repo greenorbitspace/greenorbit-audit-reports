@@ -21,8 +21,11 @@ jobs:
         with:
           node-version: 18
 
-      - run: npm install
-      - run: npm run generate
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate reports
+        run: npm run generate
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -35,6 +38,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

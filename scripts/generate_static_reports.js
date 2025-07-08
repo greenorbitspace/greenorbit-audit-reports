@@ -9,8 +9,8 @@ const { Client } = require('@notionhq/client');
 // --- Config ---
 const NOTION_API_KEY = process.env.NOTION_API_KEY;
 const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
-const OUTPUT_DIR = path.resolve(__dirname, 'reports');
-const TEMPLATE_FILE = path.resolve(__dirname, 'report_template.hbs');
+const OUTPUT_DIR = path.resolve(__dirname, '../reports');
+const TEMPLATE_FILE = path.resolve(__dirname, '../templates/report_template.hbs');
 
 if (!NOTION_API_KEY || !NOTION_DATABASE_ID) {
   console.error('❌ Missing NOTION_API_KEY or NOTION_DATABASE_ID in .env');
