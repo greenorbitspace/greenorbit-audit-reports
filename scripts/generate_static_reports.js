@@ -5,11 +5,13 @@ const fs = require('fs');
 const path = require('path');
 const Handlebars = require('handlebars');
 const { Client } = require('@notionhq/client');
+const { generateChart } = require('./generate_chart');
 
 // --- Config ---
 const NOTION_API_KEY = process.env.NOTION_API_KEY;
 const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
 const OUTPUT_DIR = path.resolve(__dirname, '../reports');
+const ASSETS_DIR = path.resolve(OUTPUT_DIR, 'assets');
 const TEMPLATE_FILE = path.resolve(__dirname, '../templates/report_template.hbs');
 
 if (!NOTION_API_KEY || !NOTION_DATABASE_ID) {
@@ -20,7 +22,6 @@ if (!NOTION_API_KEY || !NOTION_DATABASE_ID) {
 const notion = new Client({ auth: NOTION_API_KEY });
 
 // --- Helpers ---
-
 function slugify(text) {
   return text.toString().toLowerCase()
     .replace(/\s+/g, '-')
@@ -30,11 +31,16 @@ function slugify(text) {
     .replace(/-+$/, '');
 }
 
-Handlebars.registerHelper('ifEquals', function(a, b, opts) {
-  return (a === b) ? opts.fn(this) : opts.inverse(this);
+Handlebars.registerHelper('ifEquals', function (a, b, opts) {
+  return a === b ? opts.fn(this) : opts.inverse(this);
 });
 
-// Fetch and debug raw entries
+function numberWithCommas(x) {
+  if (!x && x !== 0) return '';
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// --- Fetch Notion entries ---
 async function fetchAuditDataFromNotion() {
   const pages = [];
   let cursor = undefined;
@@ -56,7 +62,7 @@ async function fetchAuditDataFromNotion() {
       || null;
     const url = props.URL?.url || null;
 
-    console.log('DEBUG: Org:', orgName, '| URL:', url);  // Debug log to check data
+    console.log('DEBUG: Org:', orgName, '| URL:', url);
 
     return {
       orgName,
@@ -72,7 +78,6 @@ async function fetchAuditDataFromNotion() {
     };
   });
 
-  // Filter entries that have both orgName and url
   return entries.filter(entry => {
     const valid = entry.url && entry.orgName;
     if (!valid) console.log('DEBUG: Filtered out entry:', entry);
@@ -80,24 +85,14 @@ async function fetchAuditDataFromNotion() {
   });
 }
 
-function numberWithCommas(x) {
-  if (!x && x !== 0) return '';
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
+// --- Entry enrichment ---
 function enrichEntry(entry) {
-  const monthlyPageViews = 100000; // example static or make dynamic
+  const monthlyPageViews = 100000;
 
-  // Calculate monthly CO2 in kg
   entry.monthlyCO2kg = (entry.co2 * monthlyPageViews / 1000);
-  
-  // Km equivalent driving (0.12 kg CO2/km)
   const kmEquivalent = Math.round(entry.monthlyCO2kg / 0.12);
-
-  // LED bulb hours (0.06 kWh per kg CO2, bulb 10W)
   const bulbHours = Math.round((entry.monthlyCO2kg * 0.06 * 1000) / 10);
 
-  // Format numbers with commas & decimals
   entry.co2 = Number(entry.co2).toFixed(2);
   entry.totalBytesFormatted = numberWithCommas(entry.totalBytes);
   entry.requestsFormatted = numberWithCommas(entry.requests);
@@ -105,17 +100,14 @@ function enrichEntry(entry) {
   entry.kmEquivalent = kmEquivalent;
   entry.bulbHours = bulbHours;
 
-  // Grade interpretation and icon mapping
   const gradeMap = {
-    'A (🌳🌳🌳)': { 
-      interpretation: 'Excellent digital sustainability performance.', 
+    'A (🌳🌳🌳)': {
+      interpretation: 'Excellent digital sustainability performance.',
       icon: '🌳🌳🌳',
       recommendations: [
         'Maintain current optimisation efforts.',
         'Monitor regularly for performance changes.'
-      ],
-      impact: `Your website generates approximately ${entry.monthlyCO2kgFormatted} kg CO₂ monthly — equivalent to driving about ${kmEquivalent} km in a petrol car or powering a 10W LED bulb for around ${bulbHours} hours.`,
-      comments: 'Keep up the excellent sustainable practices!'
+      ]
     },
     'B (🌳🌳)': {
       interpretation: 'Good with room for improvement.',
@@ -124,9 +116,7 @@ function enrichEntry(entry) {
         'Audit third-party scripts (e.g., analytics, ads).',
         'Use next-gen image formats like WebP or AVIF.',
         'Lazy-load non-critical assets.'
-      ],
-      impact: `Your website generates approximately ${entry.monthlyCO2kgFormatted} kg CO₂ monthly — equivalent to driving about ${kmEquivalent} km in a petrol car or powering a 10W LED bulb for around ${bulbHours} hours.`,
-      comments: 'Consider addressing these areas to improve further.'
+      ]
     },
     'C (🌳)': {
       interpretation: 'Moderate performance; optimisation recommended.',
@@ -134,9 +124,7 @@ function enrichEntry(entry) {
       recommendations: [
         'Minimise HTTP requests.',
         'Optimise JavaScript and CSS delivery.'
-      ],
-      impact: `Your website generates approximately ${entry.monthlyCO2kgFormatted} kg CO₂ monthly — equivalent to driving about ${kmEquivalent} km in a petrol car or powering a 10W LED bulb for around ${bulbHours} hours.`,
-      comments: 'Opportunities exist to improve sustainability.'
+      ]
     },
     'D (🍂)': {
       interpretation: 'Below average; needs attention.',
@@ -144,9 +132,7 @@ function enrichEntry(entry) {
       recommendations: [
         'Reduce page size significantly.',
         'Remove unused scripts and styles.'
-      ],
-      impact: `Your website generates approximately ${entry.monthlyCO2kgFormatted} kg CO₂ monthly — equivalent to driving about ${kmEquivalent} km in a petrol car or powering a 10W LED bulb for around ${bulbHours} hours.`,
-      comments: 'Urgent attention recommended to reduce environmental impact.'
+      ]
     },
     'E (🔥)': {
       interpretation: 'Poor performance; urgent improvements required.',
@@ -154,88 +140,80 @@ function enrichEntry(entry) {
       recommendations: [
         'Conduct a full performance and carbon audit.',
         'Engage with sustainability experts.'
-      ],
-      impact: `Your website generates approximately ${entry.monthlyCO2kgFormatted} kg CO₂ monthly — equivalent to driving about ${kmEquivalent} km in a petrol car or powering a 10W LED bulb for around ${bulbHours} hours.`,
-      comments: 'Immediate improvements are necessary.'
+      ]
     },
     'Unknown': {
       interpretation: 'Sustainability grade data unavailable.',
       icon: '❓',
-      recommendations: [],
-      impact: 'No impact data available.',
-      comments: ''
+      recommendations: []
     }
   };
 
   const gradeInfo = gradeMap[entry.grade] || gradeMap['Unknown'];
-
   entry.gradeInterpretation = gradeInfo.interpretation;
   entry.gradeIcon = gradeInfo.icon;
   entry.recommendations = gradeInfo.recommendations;
-  entry.impact = gradeInfo.impact;
-  entry.comments = gradeInfo.comments;
+  entry.comments = 'This section contains tailored insights based on your sustainability performance.';
+  entry.summary = 'This audit evaluates key environmental metrics of your website to help reduce digital carbon footprint.';
 
-  // Fallback for summary — you can customize or generate this separately
-  entry.summary = `This audit evaluates key environmental metrics of your website to help reduce digital carbon footprint.`;
-
-  // Root causes (example static list or dynamically fetched)
   entry.rootCauses = [
-    "High number of third-party tracking and analytics scripts.",
-    "Uncompressed large images, particularly hero banners.",
-    "Lack of lazy loading on below-the-fold images.",
-    "Multiple large JavaScript bundles increasing page weight."
+    "High number of third-party scripts.",
+    "Uncompressed images increase page load time.",
+    "Lack of caching or lazy loading on large resources."
   ];
 
-  // Detailed recommendations with priorities
   entry.detailedRecommendations = [
-    { priority: "High", text: "Compress and convert large images to WebP or AVIF formats." },
-    { priority: "High", text: "Audit and remove unnecessary third-party scripts." },
-    { priority: "Medium", text: "Implement lazy loading for offscreen images." },
-    { priority: "Medium", text: "Minify and defer JavaScript where possible." },
-    { priority: "Low", text: "Enable HTTP caching for static assets to reduce repeat load impact." }
+    { priority: "High", text: "Compress images and convert to WebP or AVIF." },
+    { priority: "High", text: "Remove unnecessary scripts (e.g., unused tracking)." },
+    { priority: "Medium", text: "Implement lazy loading for offscreen content." },
+    { priority: "Medium", text: "Minify JavaScript and defer non-essential scripts." },
+    { priority: "Low", text: "Enable asset caching and CDN delivery." }
   ];
 
-  // Next steps & goals
   entry.nextSteps = [
-    "Schedule a sustainability review meeting with Green Orbit Digital.",
-    "Set measurable CO₂ reduction targets for the next quarter.",
-    "Implement continuous monitoring with monthly reporting.",
-    "Explore server and CDN optimisations for improved efficiency."
+    "Discuss roadmap with Green Orbit Digital.",
+    "Review full site audit quarterly.",
+    "Set CO₂ reduction goals and KPIs.",
+    "Track changes with monthly reports."
   ];
 
-  // ... other fields ...
   return entry;
 }
 
+// --- Main ---
 (async () => {
   try {
     console.log('🚀 Fetching audit data from Notion...');
-    const auditEntriesRaw = await fetchAuditDataFromNotion();
-
-    if (auditEntriesRaw.length === 0) {
-      console.warn('⚠️ No valid entries found in Notion database');
+    const rawEntries = await fetchAuditDataFromNotion();
+    if (rawEntries.length === 0) {
+      console.warn('⚠️ No valid entries found');
       process.exit(0);
     }
 
-    const auditEntries = auditEntriesRaw.map(enrichEntry);
-
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+    fs.mkdirSync(ASSETS_DIR, { recursive: true });
 
     const templateSource = fs.readFileSync(TEMPLATE_FILE, 'utf-8');
     const template = Handlebars.compile(templateSource);
 
-    console.log(`📝 Generating ${auditEntries.length} reports in ${OUTPUT_DIR}...`);
+    for (const entryRaw of rawEntries) {
+      const entry = enrichEntry(entryRaw);
+      const slug = slugify(entry.orgName);
 
-    for (const entry of auditEntries) {
-      const filename = slugify(entry.orgName) + '.html';
+      // Generate chart and add to entry
+      const chartFilename = await generateChart(entry.orgName, entry.co2, entry.totalBytes, entry.requests, ASSETS_DIR);
+      entry.chartFilename = `assets/${chartFilename}`;
+
+      // Generate HTML
       const html = template(entry);
-      fs.writeFileSync(path.join(OUTPUT_DIR, filename), html);
-      console.log(`✅ Created report for ${entry.orgName} → ${filename}`);
+      const outFile = path.join(OUTPUT_DIR, `${slug}.html`);
+      fs.writeFileSync(outFile, html);
+      console.log(`✅ Report written → ${outFile}`);
     }
 
-    console.log('🎉 All reports generated successfully.');
-  } catch (error) {
-    console.error('❌ Error:', error);
+    console.log('🎉 All sustainability reports generated successfully!');
+  } catch (err) {
+    console.error('❌ Generation error:', err);
     process.exit(1);
   }
 })();
