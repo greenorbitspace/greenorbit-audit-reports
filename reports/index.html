@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Website Sustainability Audits | Green Orbit Digital</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -21,22 +25,21 @@
 
     header h1 {
       margin: 0;
-      font-size: 2.4rem;
+      font-size: 2.6rem;
     }
 
     header p {
       margin-top: 1rem;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
     }
 
-    .container {
-      max-width: 900px;
-      margin: 2.5rem auto;
-      padding: 0 1.5rem;
+    main {
+      width: 100%;
+      padding: 2rem 1.5rem;
     }
 
     section {
-      margin-bottom: 2.5rem;
+      margin-bottom: 3rem;
       background: #ffffff;
       padding: 2rem;
       border-radius: 8px;
@@ -46,16 +49,28 @@
     section h2 {
       color: #276749;
       margin-bottom: 1rem;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
     }
 
-    section p, li {
+    section p, section li {
       font-size: 1rem;
       line-height: 1.6;
     }
 
+    .two-col {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .two-col > div {
+      flex: 1;
+      min-width: 300px;
+    }
+
     ul {
       padding-left: 1.25rem;
+      margin: 1rem 0;
     }
 
     ul li {
@@ -78,30 +93,41 @@
       background-color: #244d3d;
     }
 
+    .full-width-stripe {
+      width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
     .stripe-wrapper {
       margin-top: 2rem;
-      overflow-x: auto;
+      padding: 0;
     }
 
     footer {
-      margin-top: 3rem;
-      padding: 1.5rem;
+      background: #fff;
+      border-top: 1px solid #ddd;
+      padding: 2rem 1rem;
       text-align: center;
       font-size: 0.9rem;
       color: #888;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       header h1 {
         font-size: 2rem;
       }
 
-      .container {
-        padding: 0 1rem;
+      section h2 {
+        font-size: 1.4rem;
+      }
+
+      .two-col {
+        flex-direction: column;
       }
     }
   </style>
-  <!-- ✅ Stripe Pricing Table Script (only once) -->
+  <!-- Stripe Pricing Table Script -->
   <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 </head>
 <body>
@@ -111,41 +137,55 @@
     <p>Accelerate your climate goals with actionable insights from Green Orbit Digital</p>
   </header>
 
-  <main class="container">
+  <main>
 
     <section>
-      <h2>Why Website Sustainability Matters</h2>
-      <p>
-        The internet produces over 4% of global carbon emissions — and it’s rising fast. Every website visit has an environmental cost.
-        Green Orbit Digital helps you assess and reduce the impact of your digital assets through transparent, actionable audits.
-      </p>
+      <h2>Why Sustainability Audits?</h2>
+      <div class="two-col">
+        <div>
+          <p>
+            The internet produces over 4% of global carbon emissions. Every website visit has an environmental cost.
+            At Green Orbit Digital, we quantify and optimise your digital footprint so you can operate more sustainably.
+          </p>
+        </div>
+        <div>
+          <ul>
+            <li>Improve your ESG reporting and procurement eligibility</li>
+            <li>Demonstrate environmental leadership</li>
+            <li>Identify optimisation opportunities for faster, greener websites</li>
+            <li>Enhance funding applications with measurable impact</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <section>
-      <h2>What’s Included in an Audit</h2>
-      <ul>
-        <li><strong>Carbon Load Estimation:</strong> CO₂ per pageview, based on data transfer and server energy mix</li>
-        <li><strong>Performance Analysis:</strong> Page size, request count, and load time</li>
-        <li><strong>Infrastructure Audit:</strong> Green hosting checks, CDN usage, and DNS footprint</li>
-        <li><strong>Best Practices Review:</strong> Compression, caching, accessibility, and energy-efficient delivery</li>
-        <li><strong>Actionable Recommendations:</strong> Tailored guidance to reduce emissions and improve efficiency</li>
-      </ul>
-      <a href="mailto:hello@greenorbit.space" class="cta-button">Request a Free Audit</a>
+      <h2>What's Included in Your Audit</h2>
+      <div class="two-col">
+        <div>
+          <ul>
+            <li><strong>Carbon Load Estimation:</strong> CO₂ per pageview using actual transfer size and data centre location</li>
+            <li><strong>Performance Breakdown:</strong> Requests, load time, page weight, third-party scripts</li>
+            <li><strong>Infrastructure Audit:</strong> Hosting sustainability, CDN, DNS footprint</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li><strong>Green Hosting Check:</strong> Validation of your provider against the Green Web Foundation</li>
+            <li><strong>Recommendations:</strong> Actionable, tailored improvements prioritised by impact</li>
+            <li><strong>Delivery Format:</strong> Notion dashboard or downloadable PDF</li>
+          </ul>
+          <a href="mailto:hello@greenorbit.space" class="cta-button">Request a Free Audit</a>
+        </div>
+      </div>
     </section>
 
-    <section>
-      <h2>Upgrade to a Paid Audit Plan</h2>
-      <p>
-        Looking for faster turnaround, full multi-page reports, or stakeholder-ready deliverables? Choose a paid tier below to unlock:
+    <section class="full-width-stripe">
+      <h2 style="text-align:center;">Choose a Paid Audit Plan</h2>
+      <p style="text-align:center; max-width: 800px; margin: 0 auto 2rem;">
+        For deeper insights, faster turnaround, and advanced deliverables like PDF reports and team dashboards, explore our premium audit plans:
       </p>
-      <ul>
-        <li>Detailed dashboards and downloadable PDF reports</li>
-        <li>Analysis across entire websites or app ecosystems</li>
-        <li>Priority support and next-day delivery options</li>
-        <li>Custom integrations (Notion, HubSpot, Xero, more)</li>
-      </ul>
 
-      <!-- ✅ Stripe Pricing Table Embed -->
       <div class="stripe-wrapper">
         <stripe-pricing-table
           pricing-table-id="prctbl_1RjhVYE9V0wpcpD5TWUgwj6Z"
@@ -155,11 +195,25 @@
     </section>
 
     <section>
-      <h2>Who This Is For</h2>
-      <p>
-        Ideal for sustainability leaders, digital agencies, universities, grant-funded projects, and any organisation that values transparency, impact, and climate responsibility in the digital space.
-        If you’re preparing for a funding round, ESG report, or want to lead by example — we’ve got you covered.
-      </p>
+      <h2>Who We Work With</h2>
+      <div class="two-col">
+        <div>
+          <p>
+            Our sustainability audits are trusted by organisations across the climate, education, and space sectors, including:
+          </p>
+          <ul>
+            <li>Startups & scale-ups preparing for investment</li>
+            <li>Universities & research institutions</li>
+            <li>Agencies & digital teams embedding sustainability</li>
+            <li>Public sector bids requiring measurable impact</li>
+          </ul>
+        </div>
+        <div>
+          <p>
+            Whether you're applying for grants, publishing ESG reports, or aligning to the Sustainable Development Goals (SDGs), Green Orbit Digital equips you with clear, climate-aligned insights.
+          </p>
+        </div>
+      </div>
     </section>
 
   </main>
