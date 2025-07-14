@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Green Orbit Sustainability Reports</title>
+  <title>Website Sustainability Audits | Green Orbit Digital</title>
   <style>
     body {
       margin: 0;
@@ -15,17 +15,17 @@
     header {
       background: #2E5F4D;
       color: white;
-      padding: 2.5rem 1rem;
+      padding: 3rem 1rem;
       text-align: center;
     }
 
     header h1 {
       margin: 0;
-      font-size: 2.2rem;
+      font-size: 2.4rem;
     }
 
     header p {
-      margin-top: 0.75rem;
+      margin-top: 1rem;
       font-size: 1.2rem;
     }
 
@@ -54,28 +54,12 @@
       line-height: 1.6;
     }
 
-    ul.report-list {
-      list-style: none;
-      padding: 0;
+    ul {
+      padding-left: 1.25rem;
     }
 
-    ul.report-list li {
-      margin: 0.75rem 0;
-      background: #ffffff;
-      padding: 1rem;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-      transition: all 0.2s ease;
-    }
-
-    ul.report-list li:hover {
-      background-color: #e8f5e9;
-    }
-
-    ul.report-list a {
-      text-decoration: none;
-      color: #2E5F4D;
-      font-weight: 600;
+    ul li {
+      margin-bottom: 0.75rem;
     }
 
     .cta-button {
@@ -94,6 +78,11 @@
       background-color: #244d3d;
     }
 
+    .stripe-wrapper {
+      margin-top: 2rem;
+      overflow-x: auto;
+    }
+
     footer {
       margin-top: 3rem;
       padding: 1.5rem;
@@ -104,7 +93,7 @@
 
     @media (max-width: 600px) {
       header h1 {
-        font-size: 1.8rem;
+        font-size: 2rem;
       }
 
       .container {
@@ -112,55 +101,72 @@
       }
     }
   </style>
+  <!-- ✅ Stripe Pricing Table Script (only once) -->
+  <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 </head>
 <body>
 
   <header>
-    <h1>🌍 Green Orbit Sustainability Reports</h1>
-    <p>Website carbon audits for a cleaner digital future</p>
+    <h1>🌍 Website Sustainability Audits</h1>
+    <p>Accelerate your climate goals with actionable insights from Green Orbit Digital</p>
   </header>
 
   <main class="container">
 
     <section>
-      <h2>About This Portal</h2>
+      <h2>Why Website Sustainability Matters</h2>
       <p>
-        This page provides public access to sustainability audit reports for websites assessed by Green Orbit Digital.
-        Each report evaluates digital carbon emissions, page performance, and environmental impact, with
-        tailored recommendations to reduce energy use and improve website sustainability.
+        The internet produces over 4% of global carbon emissions — and it’s rising fast. Every website visit has an environmental cost.
+        Green Orbit Digital helps you assess and reduce the impact of your digital assets through transparent, actionable audits.
       </p>
     </section>
 
     <section>
-      <h2>Our Services</h2>
-      <p>
-        We offer comprehensive sustainability audits for digital assets. Each audit includes:
-      </p>
+      <h2>What’s Included in an Audit</h2>
       <ul>
-        <li><strong>Carbon Estimation:</strong> CO₂ emissions per page load</li>
-        <li><strong>Performance Metrics:</strong> Page weight, number of requests, and server impact</li>
-        <li><strong>DNS & Hosting Review:</strong> Renewable energy usage and green hosting check</li>
-        <li><strong>Root Cause Analysis:</strong> Breakdown of performance bottlenecks and inefficiencies</li>
-        <li><strong>Custom Recommendations:</strong> Sustainable practices and optimisation tips</li>
+        <li><strong>Carbon Load Estimation:</strong> CO₂ per pageview, based on data transfer and server energy mix</li>
+        <li><strong>Performance Analysis:</strong> Page size, request count, and load time</li>
+        <li><strong>Infrastructure Audit:</strong> Green hosting checks, CDN usage, and DNS footprint</li>
+        <li><strong>Best Practices Review:</strong> Compression, caching, accessibility, and energy-efficient delivery</li>
+        <li><strong>Actionable Recommendations:</strong> Tailored guidance to reduce emissions and improve efficiency</li>
       </ul>
       <a href="mailto:hello@greenorbit.space" class="cta-button">Request a Free Audit</a>
     </section>
 
     <section>
-      <h2>Available Audit Reports</h2>
-      <ul class="report-list">
-        <!-- Replace or dynamically inject list items here -->
-        <li><a href="reports/example-org.html">Example Organization</a></li>
-        <li><a href="reports/ukseds.html">UKSEDS</a></li>
-        <li><a href="reports/pangalactic.html">PanGalactic</a></li>
-        <!-- Add more as generated -->
+      <h2>Upgrade to a Paid Audit Plan</h2>
+      <p>
+        Looking for faster turnaround, full multi-page reports, or stakeholder-ready deliverables? Choose a paid tier below to unlock:
+      </p>
+      <ul>
+        <li>Detailed dashboards and downloadable PDF reports</li>
+        <li>Analysis across entire websites or app ecosystems</li>
+        <li>Priority support and next-day delivery options</li>
+        <li>Custom integrations (Notion, HubSpot, Xero, more)</li>
       </ul>
+
+      <!-- ✅ Stripe Pricing Table Embed -->
+      <div class="stripe-wrapper">
+        <stripe-pricing-table
+          pricing-table-id="prctbl_1RjhVYE9V0wpcpD5TWUgwj6Z"
+          publishable-key="pk_live_51RZOfOE9V0wpcpD5X5hZuiXbtRoCa2cMhcILadCbF63npB6O4NdpjKVTqsSBnqx9vrOTWHbgven6dUnGVoVDuhMT00TO8eklxX">
+        </stripe-pricing-table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Who This Is For</h2>
+      <p>
+        Ideal for sustainability leaders, digital agencies, universities, grant-funded projects, and any organisation that values transparency, impact, and climate responsibility in the digital space.
+        If you’re preparing for a funding round, ESG report, or want to lead by example — we’ve got you covered.
+      </p>
     </section>
 
   </main>
 
   <footer>
-    &copy; 2025 Green Orbit Digital Ltd. All rights reserved.
+    &copy; 2025 Green Orbit Digital Ltd. All rights reserved. |
+    <a href="mailto:hello@greenorbit.space">hello@greenorbit.space</a>
   </footer>
 
 </body>
