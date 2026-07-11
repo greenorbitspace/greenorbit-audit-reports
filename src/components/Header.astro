@@ -1,0 +1,55 @@
+---
+---
+<header>
+  <div class="container header-inner">
+    <a href="/" class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      Green Orbit <span class="brand-suffix">Audit</span>
+    </a>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="https://greenorbit.digital" target="_blank" rel="noopener">Green Orbit Digital</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    border-bottom: 1px solid var(--goa-navy-line);
+    padding: 20px 0;
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--goa-text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand:hover { text-decoration: none; color: var(--goa-text); }
+  .brand-suffix { color: var(--goa-teal); font-weight: 500; }
+  .brand-mark {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--goa-teal);
+    box-shadow: 0 0 12px 2px rgba(0, 194, 168, 0.6);
+    flex-shrink: 0;
+  }
+  nav {
+    display: flex;
+    gap: 22px;
+    font-size: 0.9rem;
+    color: var(--goa-text-dim);
+  }
+  nav a { color: var(--goa-text-dim); }
+  nav a:hover { color: var(--goa-teal); }
+</style>

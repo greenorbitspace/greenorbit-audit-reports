@@ -1,0 +1,15 @@
+{
+  "url": "https://spaceforneurodiversity.org",
+  "domain": "spaceforneurodiversity.org",
+  "label": "Space for Neurodiversity",
+  "auditedAt": "2026-07-01T09:00:00.000Z",
+  "grade": "A+",
+  "pageWeightBytes": 398000,
+  "co2PerVisitGrams": 0.21,
+  "co2PerYearKg": 25.2,
+  "cleanerThanPercent": 91,
+  "greenHosting": true,
+  "hostedBy": "Cloudflare",
+  "monthlyVisits": 10000,
+  "notes": "Sample data — replace by running npm run audit or waiting for the scheduled workflow."
+}

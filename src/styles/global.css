@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  /* Brand tokens */
+  --goa-navy: #0B0F1A;
+  --goa-navy-raised: #121828;
+  --goa-navy-line: #232C42;
+  --goa-teal: #00C2A8;
+  --goa-teal-dim: #0A5C51;
+  --goa-amber: #F5A623;
+  --goa-text: #E7ECF5;
+  --goa-text-dim: #9AA6BE;
+
+  /* Grade colors, A (best) -> F (worst) */
+  --grade-a: #00C2A8;
+  --grade-b: #6FCF97;
+  --grade-c: #F5A623;
+  --grade-d: #F2994A;
+  --grade-e: #EB5757;
+  --grade-f: #C0392B;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--goa-navy);
+  color: var(--goa-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image:
+    radial-gradient(ellipse at top right, rgba(0, 194, 168, 0.08), transparent 60%),
+    radial-gradient(ellipse at bottom left, rgba(245, 166, 35, 0.05), transparent 55%);
+  background-attachment: fixed;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.4em;
+}
+
+a {
+  color: var(--goa-teal);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--goa-teal);
+  outline-offset: 2px;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--goa-teal);
+}
+
+.card {
+  background: var(--goa-navy-raised);
+  border: 1px solid var(--goa-navy-line);
+  border-radius: var(--radius);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

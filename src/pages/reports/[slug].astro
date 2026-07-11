@@ -1,0 +1,140 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ScoreBadge from '../../components/ScoreBadge.astro';
+
+export async function getStaticPaths() {
+  const reports = await getCollection('reports');
+  return reports.map((report) => ({
+    params: { slug: report.id },
+    props: { report },
+  }));
+}
+
+const { report } = Astro.props;
+const d = report.data;
+const auditedDate = new Date(d.auditedAt).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+const kwhSaved = (d.co2PerYearKg / 0.233).toFixed(1); // rough reverse of UK grid intensity, illustrative
+---
+<BaseLayout title={d.domain} description={`Sustainability audit for ${d.domain}: grade ${d.grade}, ${d.co2PerVisitGrams.toFixed(2)}g CO₂ per visit.`}>
+  <section class="container report">
+    <a href="/" class="back">← All reports</a>
+
+    <div class="report-head">
+      <div>
+        <p class="eyebrow">Sustainability Audit</p>
+        <h1>{d.domain}</h1>
+        <p class="url"><a href={d.url} target="_blank" rel="noopener">{d.url}</a></p>
+        <p class="audited-on">Audited {auditedDate}</p>
+      </div>
+      <ScoreBadge grade={d.grade} size="lg" />
+    </div>
+
+    <div class="metric-grid">
+      <div class="metric card">
+        <p class="metric-label">CO₂ per visit</p>
+        <p class="metric-value">{d.co2PerVisitGrams.toFixed(2)}<span>g</span></p>
+      </div>
+      <div class="metric card">
+        <p class="metric-label">CO₂ per year<span class="hint">at {d.monthlyVisits.toLocaleString()} visits/mo</span></p>
+        <p class="metric-value">{d.co2PerYearKg.toFixed(1)}<span>kg</span></p>
+      </div>
+      <div class="metric card">
+        <p class="metric-label">Page weight</p>
+        <p class="metric-value">{(d.pageWeightBytes / 1024).toFixed(0)}<span>KB</span></p>
+      </div>
+      <div class="metric card">
+        <p class="metric-label">Cleaner than</p>
+        <p class="metric-value">{d.cleanerThanPercent}<span>%</span></p>
+      </div>
+    </div>
+
+    <div class="hosting card">
+      <div>
+        <p class="metric-label">Hosting</p>
+        <p class="hosting-value">
+          {d.greenHosting ? '🟢 Renewable-powered' : '⚪ Not confirmed green'}
+          {d.hostedBy && <span class="hosted-by"> — {d.hostedBy}</span>}
+        </p>
+      </div>
+      <a class="check-link" href={`https://www.thegreenwebfoundation.org/green-web-check/?url=${encodeURIComponent(d.url)}`} target="_blank" rel="noopener">
+        Verify on Green Web Foundation →
+      </a>
+    </div>
+
+    {d.notes && (
+      <div class="notes card">
+        <p class="metric-label">Notes</p>
+        <p>{d.notes}</p>
+      </div>
+    )}
+
+    <p class="method">
+      Methodology: transferred page weight is measured on load, then run through the
+      <a href="https://sustainablewebdesign.org/" target="_blank" rel="noopener"> Sustainable Web Design v4</a>
+      model (as implemented in CO2.js) to estimate grid, data-centre, network and device energy use.
+      Hosting is checked against the Green Web Foundation's registry of verified renewable providers.
+      Figures are estimates, not a substitute for a full lifecycle assessment.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .report { padding: 48px 0 80px; max-width: 780px; }
+  .back { color: var(--goa-text-dim); font-size: 0.85rem; }
+  .report-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    margin: 24px 0 36px;
+    flex-wrap: wrap;
+  }
+  .report-head h1 { font-size: 2rem; }
+  .url { margin: 4px 0 0; font-size: 0.9rem; }
+  .audited-on { color: var(--goa-text-dim); font-size: 0.82rem; margin: 6px 0 0; }
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .metric { padding: 18px; }
+  .metric-label {
+    font-size: 0.78rem;
+    color: var(--goa-text-dim);
+    margin: 0 0 6px;
+  }
+  .hint { display: block; font-size: 0.7rem; }
+  .metric-value {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--goa-teal);
+    margin: 0;
+  }
+  .metric-value span { font-size: 0.9rem; color: var(--goa-text-dim); margin-left: 3px; }
+  .hosting, .notes {
+    padding: 18px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .hosting-value { margin: 0; font-weight: 500; }
+  .hosted-by { color: var(--goa-text-dim); font-weight: 400; }
+  .check-link { font-size: 0.85rem; white-space: nowrap; }
+  .notes p:last-child { margin: 0; color: var(--goa-text-dim); }
+  .method {
+    font-size: 0.78rem;
+    color: var(--goa-text-dim);
+    line-height: 1.6;
+    margin-top: 28px;
+  }
+</style>

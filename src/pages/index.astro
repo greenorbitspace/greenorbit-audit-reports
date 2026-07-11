@@ -1,0 +1,162 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ScoreBadge from '../components/ScoreBadge.astro';
+
+const reports = await getCollection('reports');
+
+const gradeOrder = ['A+', 'A', 'B', 'C', 'D', 'E', 'F'];
+const sorted = [...reports].sort(
+  (a, b) => gradeOrder.indexOf(a.data.grade) - gradeOrder.indexOf(b.data.grade)
+);
+
+const total = reports.length;
+const greenCount = reports.filter((r) => r.data.greenHosting).length;
+const avgCleaner = total
+  ? Math.round(reports.reduce((sum, r) => sum + r.data.cleanerThanPercent, 0) / total)
+  : 0;
+const lastAudited = reports.length
+  ? new Date(Math.max(...reports.map((r) => new Date(r.data.auditedAt).getTime())))
+  : null;
+---
+<BaseLayout title="Dashboard" description="Live sustainability audit dashboard for the Green Orbit web ecosystem.">
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Audit Dashboard</p>
+      <h1>{total} site{total === 1 ? '' : 's'} tracked, {greenCount} on green hosting.</h1>
+      <p class="lede">
+        Every report below is generated automatically from real page-weight measurements using the
+        Sustainable Web Design carbon model — no manual entry, no Notion, no stale numbers.
+      </p>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value">{avgCleaner}%</span>
+          <span class="stat-label">cleaner than average site</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{greenCount}/{total}</span>
+          <span class="stat-label">on renewable-powered hosting</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{lastAudited ? lastAudited.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '—'}</span>
+          <span class="stat-label">last audit run</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container reports-section">
+    {total === 0 ? (
+      <div class="empty card">
+        <h2>No audits yet</h2>
+        <p>Add site URLs to <code>urls.txt</code> and run <code>npm run audit</code>, or wait for the scheduled GitHub Action to populate this dashboard.</p>
+      </div>
+    ) : (
+      <div class="grid">
+        {sorted.map((report) => (
+          <a class="report-card card" href={`/reports/${report.id}/`}>
+            <div class="report-card-top">
+              <div>
+                <p class="domain">{report.data.domain}</p>
+                <p class="label">{report.data.label}</p>
+              </div>
+              <ScoreBadge grade={report.data.grade} />
+            </div>
+            <div class="report-card-meta">
+              <span>{report.data.co2PerVisitGrams.toFixed(2)}g CO₂ / visit</span>
+              <span>{report.data.greenHosting ? '🟢 Green hosted' : '⚪ Standard hosting'}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 64px 0 40px;
+    border-bottom: 1px solid var(--goa-navy-line);
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    max-width: 18ch;
+  }
+  .lede {
+    color: var(--goa-text-dim);
+    max-width: 56ch;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+  .stat-row {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .stat-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--goa-teal);
+  }
+  .stat-label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--goa-text-dim);
+    margin-top: 2px;
+  }
+  .reports-section {
+    padding: 48px 0 80px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+  .report-card {
+    display: block;
+    padding: 20px;
+    color: var(--goa-text);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .report-card:hover {
+    border-color: var(--goa-teal);
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+  .report-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .domain {
+    font-family: var(--font-display);
+    font-weight: 600;
+    margin: 0;
+  }
+  .label {
+    color: var(--goa-text-dim);
+    font-size: 0.82rem;
+    margin: 2px 0 0;
+  }
+  .report-card-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--goa-text-dim);
+    border-top: 1px solid var(--goa-navy-line);
+    padding-top: 12px;
+  }
+  .empty {
+    padding: 40px;
+    text-align: center;
+  }
+  .empty code {
+    background: var(--goa-navy);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+</style>

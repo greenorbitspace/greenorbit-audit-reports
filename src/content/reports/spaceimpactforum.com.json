@@ -1,0 +1,15 @@
+{
+  "url": "https://spaceimpactforum.com",
+  "domain": "spaceimpactforum.com",
+  "label": "Space Impact Forum",
+  "auditedAt": "2026-07-01T09:00:00.000Z",
+  "grade": "B",
+  "pageWeightBytes": 1450000,
+  "co2PerVisitGrams": 0.71,
+  "co2PerYearKg": 85.2,
+  "cleanerThanPercent": 64,
+  "greenHosting": true,
+  "hostedBy": "Cloudflare",
+  "monthlyVisits": 10000,
+  "notes": "Sample data — replace by running npm run audit or waiting for the scheduled workflow."
+}

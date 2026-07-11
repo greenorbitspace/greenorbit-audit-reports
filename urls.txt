@@ -1,0 +1,7 @@
+# One site per line: url, optional display label
+# Lines starting with # are ignored.
+https://greenorbit.digital, Green Orbit Digital
+https://spaceforneurodiversity.org, Space for Neurodiversity
+https://spaceimpactforum.com, Space Impact Forum
+https://spaceintegrity.org, Space Integrity Initiative
+https://rjmlaird.co.uk, rjmlaird.co.uk

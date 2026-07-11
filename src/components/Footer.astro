@@ -1,0 +1,24 @@
+---
+const year = new Date().getFullYear();
+---
+<footer>
+  <div class="container footer-inner">
+    <p>
+      Emissions modelled with the <a href="https://www.thegreenwebfoundation.org/co2-js/" target="_blank" rel="noopener">Sustainable Web Design model (CO2.js)</a>.
+      Hosting checked against the <a href="https://www.thegreenwebfoundation.org/" target="_blank" rel="noopener">Green Web Foundation</a> registry.
+    </p>
+    <p>&copy; {year} Green Orbit Digital. Reports regenerate automatically.</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--goa-navy-line);
+    padding: 28px 0 40px;
+    margin-top: 60px;
+    color: var(--goa-text-dim);
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+  .footer-inner p { margin: 0 0 6px; }
+</style>

@@ -1,0 +1,19 @@
+{
+  "name": "greenorbit-audit-reports",
+  "version": "2.0.0",
+  "description": "Automated sustainability audit reports for the Green Orbit web ecosystem, built with Astro.",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "audit": "node scripts/run-audits.mjs"
+  },
+  "dependencies": {
+    "astro": "^4.16.19"
+  },
+  "devDependencies": {
+    "@tgwf/co2": "^0.16.9"
+  },
+  "license": "ISC"
+}
